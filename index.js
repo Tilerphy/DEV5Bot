@@ -1,4 +1,5 @@
 var config = require("./config.js.my");
+var botSession = require("./bot-session");
 var express = require("express");
 var bodyParser = require("body-parser");
 var app = express();
@@ -63,41 +64,12 @@ function run(token){
 		if(req.type != "message"){
 			return;
 		}
-		console.log(req);
-           	var actId= req.id;
-		var host =req.serviceUrl.split("//")[1].replace("/","");
-		console.log(host);
-		var data = {
-			type: "message",
-			from:req.recipient,
-			conversation:req.conversation,
-			replyToId: actId,
-			text: "OK",
-			id: actId
-		};
+		else{
 
-		console.log(JSON.stringify(data));
-		var path = "/v3/conversations/"+encodeURIComponent(req.conversation.id)+"/activities/"+encodeURIComponent(actId);
-		console.log(path);
-		var opt = {
-			headers: {
-				"Content-Type":"application/json",
-				"Authorization":"Bearer "+access_token,
-				"Content-Length": JSON.stringify(data).length
-			},
-			method:"POST",
-			host: host,
-			path: path,
-		};
-
-		var request = https.request(opt, function(server){
-			console.log(server.statusCode);
-			server.on("data", function(m){
-				console.log(m.toString());
-			});		
-		});
-		request.write(JSON.stringify(data));
-		request.end();
+			var session = botSession.createReplyer(access_token, req);
+			require("./talk")(req.text,req.from.id, session);
+		}
+		
 	}
 }
 

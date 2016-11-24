@@ -1,6 +1,7 @@
 # Logs
 logs
 *.log
+*.my
 npm-debug.log*
 
 # Runtime data
@@ -37,4 +38,4 @@ jspm_packages
 .node_repl_history
 
 #certs
-.pem
+*.pem

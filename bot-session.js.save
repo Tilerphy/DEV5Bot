@@ -1,0 +1,50 @@
+var https = require("https");
+var replyer = function(access_token, req){
+	return {
+
+		send: 
+			function(m){
+				if(req.type != "message"){
+					return;
+				}
+				console.log(req);
+           			var actId= req.id;
+				var host =req.serviceUrl.split("//")[1].replace("/","");
+				console.log(host);
+				var data = {
+					type: "message",
+					from:req.recipient,
+					conversation:req.conversation,
+					replyToId: actId,
+					text: m,
+					id: actId
+				};
+
+				console.log(JSON.stringify(data));
+				var path = "/v3/conversations/"+encodeURIComponent(req.conversation.id)+"/activities/"+encodeURIComponent(actId);
+				console.log(path);
+				var opt = {
+				headers: {
+					"Content-Type":"application/json, http://api.qingyunke.com/api.php?key=free&appid=0&msg=%E5%85%B3%E9%94%AE%E8%AF%8D",
+					"Authorization":"Bearer "+access_token,
+					"Content-Length": JSON.stringify(data).length
+					},
+					method:"POST",
+					host: host,
+					path: path,
+				};
+
+				var request = https.request(opt, function(server){
+					console.log(server.statusCode);
+					server.on("data", function(m){
+						console.log(m.toString());
+					});		
+				});
+				request.write(JSON.stringify(data));
+				request.end();
+			}
+	};
+
+}
+
+module.exports.createReplyer = replyer;

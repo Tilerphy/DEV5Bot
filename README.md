@@ -29,3 +29,11 @@ module.exports = config;
 
 `access_update.sh` is the script to update the Bot Framework access_token. The access_token json response is saved into `./token.my`.
 
+
+# crontab
+
+`crontab` is a good way to manage the access token updating job.
+
+run `crontab -e` in shell then add this at the last line :
+
+`*/59 * * * * sudo /<botroot>/access_update.js`

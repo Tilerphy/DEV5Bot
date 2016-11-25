@@ -22,3 +22,10 @@ module.exports = config;
 # Run
 
 `node index.js` or `nodejs index.js`
+
+# Shell
+
+`start.sh` is the script to start the web server.
+
+`access_update.sh` is the script to update the Bot Framework access_token. The access_token json response is saved into `./token.my`.
+
